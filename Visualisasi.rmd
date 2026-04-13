@@ -1,0 +1,59 @@
+---
+title: "Visualisasi"
+author: "Komsada Kelompok 3"
+date: "2026-04-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(plotly)
+```
+
+
+```{r}
+# Definisikan data
+data_angka <- c(31, 79, 51, 14, 67, 42, 50, 43, 97, 25, 90, 69, 57, 9, 72, 26, 7, 95, 87, 36, 78, 93, 76, 15, 32, 84, 82, 41, 23, 27, 60, 53, 75, 89, 71, 38, 91, 34, 29, 5, 8, 12, 13, 18, 33, 66, 64, 65, 21, 77)
+
+# Bungkus ke dalam Data Frame (WAJIB)
+df_baru <- data.frame(Value = data_angka)
+```
+
+```{r}
+# Membuat Plot
+p_kompleks <- ggplot(df_baru, aes(x = Value)) +
+  # Histogram
+  geom_histogram(aes(y = after_stat(density)), bins = 10, fill = "#9b59b6", alpha = 0.4, color = "white") +
+  # Density curve
+  geom_density(color = "#5e17eb", linewidth = 1) +
+  # Rug plot
+  geom_rug(color = "#5e17eb", alpha = 0.8) +
+  # Garis Mean (Rata-rata)
+  geom_vline(aes(xintercept = mean(Value)), color = "red", linetype = "dashed", linewidth = 0.8) +
+  # Label Mean - x dan label diarahkan ke kolom 'Value' yang ada di df_baru
+  annotate("text", x = mean(df_baru$Value) + 15, y = 0.012, 
+           label = paste("Mean:", round(mean(df_baru$Value), 1)), color = "red") +
+  labs(
+    title = "Analisis Distribusi",
+    subtitle = "Histogram, Density, dan Rug Plot dengan Penanda Rata-rata",
+    x = "Nilai Data",
+    y = "Kepadatan (Density)"
+  ) +
+  theme_minimal()
+
+# Tampilkan plot
+p_kompleks
+```
+## Interpretasi:
+1. Karakteristik Distribusi (Bimodal)
+Grafik ini memiliki dua puncak (sekitar angka 25 dan 75). Dalam statistik, ini disebut sebagai Distribusi Bimodal. Data cenderung terbagi menjadi dua kelompok besar. Ada kelompok "nilai rendah" dan kelompok "nilai tinggi", sementara nilai di tengah (sekitar 50-60) justru lebih jarang muncul.
+
+2. Analisis Pusat Data (Mean)
+Garis putus-putus merah menunjukkan Mean = 50.4. Pada distribusi bimodal seperti ini, nilai Mean seringkali menipu. Meskipun rata-ratanya 50.4, namun jika dilihat dari histogram, frekuensi data di angka 50 justru sedang turun (lembah). Ini membuktikan bahwa rata-rata tidak selalu merepresentasikan "nilai yang paling banyak muncul" pada data yang tidak berdistribusi normal.
+
+3. Rug Plot (Garis-garis di Dasar)
+Rug plot menunjukkan bahwa data asli tersebar cukup merata di sepanjang sumbu X, namun ada "kerapatan" yang lebih tinggi di area di bawah dua puncak tersebut. Ini memvalidasi kenapa garis density (ungu tua) meliuk naik di dua tempat tersebut.
